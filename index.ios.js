@@ -19,7 +19,8 @@ export default class stopwatch extends Component {
     this.state = {
       timeElapsed: null,
       running: false,
-      startTime: null
+      startTime: null,
+      laps: []
     };
   }
 
@@ -43,7 +44,8 @@ export default class stopwatch extends Component {
     var lap = this.state.timeElapsed;
 
     this.setState({
-      startTime: new Date()
+      startTime: new Date(),
+      laps: this.state.laps.concat([lap])
     });
   }
   startStopButton() {
@@ -79,6 +81,20 @@ export default class stopwatch extends Component {
       borderWidth: 4
     }
   }
+  laps() {
+    return this.state.laps.map((time, index) => {
+      return (
+        <View key={index} style={styles.lap}>
+          <Text style={styles.lapText}>
+            Lap #{index + 1}
+          </Text>
+          <Text style={styles.lapText}>
+            {formatTime(time)}
+          </Text>
+        </View>
+      );
+    });
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -94,9 +110,7 @@ export default class stopwatch extends Component {
           </View>
         </View>
         <View style={[styles.footer]}>
-          <Text>
-            I am a list of laps
-          </Text>
+          {this.laps()}
         </View>
       </View>
     );
@@ -141,6 +155,13 @@ const styles = StyleSheet.create({
   },
   stopButton: {
     borderColor: '#CC0000'
+  },
+  lap: {
+    justifyContent: 'space-around',
+    flexDirection: 'row'
+  },
+  lapText: {
+    fontSize: 30
   }
 });
 
